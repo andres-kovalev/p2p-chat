@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
@@ -53,9 +54,10 @@ const SignInFormCard = styled(Card)(({ theme }) => ({
 
 interface LoginProps {
   onLogin: (credentials: Credentials) => void;
+  onScanClick?: VoidFunction;
 }
 
-export default function SignIn({ onLogin }: LoginProps) {
+export default function SignIn({ onLogin, onScanClick }: LoginProps) {
   const [enabled, setEnabled] = useState(false);
 
   const loginRef = useRef<HTMLInputElement>(null);
@@ -152,14 +154,20 @@ export default function SignIn({ onLogin }: LoginProps) {
               >
                 Join
               </Button>
-              <Button
-                fullWidth
-                variant="text"
-                onClick={() => alert('Sign in with Google')}
-                startIcon={<QrCodeScannerIcon />}
-              >
-                Scan QR code1
-              </Button>
+              {onScanClick && (
+                <>
+                  <Divider>or</Divider>
+                  <Button
+                    fullWidth
+                    variant="text"
+                    onClick={onScanClick}
+                    startIcon={<QrCodeScannerIcon />}
+                    size="large"
+                    >
+                    Scan QR code1
+                  </Button>
+                </>
+              )}
             </Box>
           </CardContent>
         </SignInFormCard>
