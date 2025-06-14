@@ -1,7 +1,7 @@
+import Login from "./components/Login";
+
 export function App() {
   return (
-    <>
-      P2P Chat app
-    </>
+    <Login onLogin={() => {}} />
   );
 }
