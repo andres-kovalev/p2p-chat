@@ -14,30 +14,17 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { Credentials } from '../types';
 import { hashString } from '../utils/hash';
 
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+const Container = styled(Stack)(({ theme }) => ({
+  height: '100dvh',
   minHeight: '100%',
+  maxHeight: '100%',
   padding: 0,
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
+  }
 }));
 
-const SignInFormCard = styled(Card)(({ theme }) => ({
+const FormCard = styled(Card)(({ theme }) => ({
   alignSelf: 'center',
   margin: 'auto',
   padding: theme.spacing(4),
@@ -52,23 +39,23 @@ const SignInFormCard = styled(Card)(({ theme }) => ({
   }
 }));
 
-interface LoginProps {
+export interface LoginProps {
   onLogin: (credentials: Credentials) => void;
   onScanClick?: VoidFunction;
 }
 
-export default function SignIn({ onLogin, onScanClick }: LoginProps) {
+export function Login({ onLogin, onScanClick }: LoginProps) {
   const [enabled, setEnabled] = useState(false);
 
   const loginRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const deviceIdRef = useRef<HTMLInputElement>(null);
+  const deviceNameRef = useRef<HTMLInputElement>(null);
 
   const checkEnabled = () => {
     setEnabled(Boolean(
       loginRef.current?.value &&
         passwordRef.current?.value &&
-        deviceIdRef.current?.value
+        deviceNameRef.current?.value
     ));
   };
 
@@ -78,15 +65,15 @@ export default function SignIn({ onLogin, onScanClick }: LoginProps) {
     onLogin({
       login: loginRef.current!.value,
       hash: await hashString(passwordRef.current!.value),
-      deviceId: deviceIdRef.current!.value,
+      deviceName: deviceNameRef.current!.value,
     });
   };
 
   return (
     <>
       <CssBaseline enableColorScheme />
-      <SignInContainer direction="column" justifyContent="space-between">
-        <SignInFormCard variant="outlined">
+      <Container direction="column" justifyContent="space-between">
+        <FormCard variant="outlined">
           <CardContent>
             <Typography
               component="h1"
@@ -110,7 +97,6 @@ export default function SignIn({ onLogin, onScanClick }: LoginProps) {
                 <TextField
                   name="login"
                   placeholder="Login"
-                  autoComplete="login"
                   autoFocus
                   required
                   fullWidth
@@ -124,7 +110,6 @@ export default function SignIn({ onLogin, onScanClick }: LoginProps) {
                   name="password"
                   placeholder="••••••"
                   type="password"
-                  autoComplete="current-password"
                   required
                   fullWidth
                   variant="outlined"
@@ -136,11 +121,10 @@ export default function SignIn({ onLogin, onScanClick }: LoginProps) {
                 <TextField
                   name="name"
                   placeholder="My device"
-                  autoComplete="name"
                   required
                   fullWidth
                   variant="outlined"
-                  inputRef={deviceIdRef}
+                  inputRef={deviceNameRef}
                   onChange={checkEnabled}
                 />
               </FormControl>
@@ -170,8 +154,8 @@ export default function SignIn({ onLogin, onScanClick }: LoginProps) {
               )}
             </Box>
           </CardContent>
-        </SignInFormCard>
-      </SignInContainer>
+        </FormCard>
+      </Container>
     </>
   );
 }

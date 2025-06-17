@@ -1,7 +1,7 @@
 export interface DeviceModel {
   readonly peerId: string;
 
-  deviceId: string;
+  name: string;
 
   isOnline?: boolean;
 
