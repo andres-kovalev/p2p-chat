@@ -15,9 +15,9 @@ export default defineConfig({
 
     manifest: {
       name: 'P2P Chat',
-      short_name: 'p2p-chat',
+      short_name: 'P2P Chat',
       description: 'Peer to peer chat using WebRTC & decentralised sync',
-      theme_color: '#ffffff',
+      theme_color: '#fafafa',
     },
 
     workbox: {

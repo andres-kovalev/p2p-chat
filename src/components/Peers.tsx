@@ -6,19 +6,28 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
 import { DeviceModel } from '../models/Device';
 import Link from '@mui/material/Link';
+import { OnlineMarker } from './OnlineMarker';
+import { AvatarWithName } from './AvatarWithName';
+import { ChatToolbar } from './ChatToolbar';
+import { styled } from '@mui/material/styles';
 
-interface PeersProps {
-  roomName: string;
+const PeersList = styled(List)(() => ({
+  width: '100%',
+  minWidth: 360,
+  margin: 0,
+  padding: 0,
+}));
+
+export interface PeersProps {
+  name: string;
   devices: DeviceModel[];
   onMenuClick?: MouseEventHandler<HTMLButtonElement>;
   onRenameClick?: MouseEventHandler<HTMLElement>;
@@ -26,11 +35,11 @@ interface PeersProps {
   onDeviceMenuClick?: (device: DeviceModel, event: MouseEvent) => void;
 }
 
-export function Peers({ roomName, devices, onMenuClick, onRenameClick, onSelect, onDeviceMenuClick }: PeersProps) {
+export function Peers({ name, devices, onMenuClick, onRenameClick, onSelect, onDeviceMenuClick }: PeersProps) {
   return (
     <>
       <AppBar position="sticky">
-        <Toolbar>
+        <ChatToolbar>
           {onMenuClick && (
             <IconButton
               size="large"
@@ -53,7 +62,7 @@ export function Peers({ roomName, devices, onMenuClick, onRenameClick, onSelect,
                 sx={{ flexGrow: 1, cursor: 'pointer' }}
                 onClick={onRenameClick}
               >
-                {roomName}
+                {name}
               </Link>
               <IconButton color="inherit" onClick={onRenameClick}>
                 <EditIcon />
@@ -61,12 +70,12 @@ export function Peers({ roomName, devices, onMenuClick, onRenameClick, onSelect,
             </>
           ) : (
             <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-              {roomName}
+              {name}
             </Typography>
           )}
-        </Toolbar>
+        </ChatToolbar>
       </AppBar>
-      <List sx={{ width: '100%', minWidth: 360, margin: 0, padding: 0 }}>
+      <PeersList>
         {devices.map((device) => (
           <Fragment key={device.peerId}>
             <ListItem disablePadding secondaryAction={onDeviceMenuClick && (
@@ -76,23 +85,19 @@ export function Peers({ roomName, devices, onMenuClick, onRenameClick, onSelect,
             )}>
               <ListItemButton onClick={() => onSelect?.(device)}>
                 <ListItemAvatar>
-                  <Avatar>VK</Avatar>
+                  <AvatarWithName name={device.name} />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={device.deviceId}
-                  secondary={
-                    <>
-                      {device.isOnline ? <>online <Badge color="success" variant="dot" sx={{ ml: 0.5, top: -1 }} aria-hidden /></> : 'offline'}
-                    </>
-                  }
+                  primary={device.name}
+                  secondary={<OnlineMarker isOnline={device.isOnline} />}
                 />
-                {device.hasUpdates && <Badge color="info" badgeContent=" " sx={{ mr: 3 }} aria-label="Has updates" />}
+                {device.hasUpdates && <Badge color="primary" badgeContent="1" sx={{ mr: 3 }} aria-label="Has updates" />}
               </ListItemButton>
             </ListItem>
             <Divider component="li" />
           </Fragment>
         ))}
-      </List>
+      </PeersList>
     </>
   );
 };
