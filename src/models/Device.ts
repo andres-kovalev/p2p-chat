@@ -1,3 +1,5 @@
+import { MessageModel } from "./Message";
+
 export interface DeviceModel {
   readonly peerId: string;
 
@@ -6,4 +8,12 @@ export interface DeviceModel {
   isOnline?: boolean;
 
   hasUpdates?: boolean;
+
+  messages: MessageModel[];
+
+  sendText(text: string): void;
+
+  sendFile(file: File): void;
+
+  removeMessage(message: MessageModel): void;
 }
