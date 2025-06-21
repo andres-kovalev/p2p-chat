@@ -1,5 +1,4 @@
-import { FileModel } from "../../models/File";
-import { MessageBubble, type MessageBubbleProps, type ContextAction } from "../MessageBubble";
+import { observer, Observer } from 'mobx-react-lite';
 import { grey, red } from '@mui/material/colors';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import Stack from '@mui/material/Stack';
@@ -9,11 +8,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { expectNever } from "../../utils/expect";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CheckIcon from '@mui/icons-material/Check';
+import { FileModel } from "../../models/File";
+import { MessageBubble, type MessageBubbleProps, type ContextAction } from "../MessageBubble";
 import { downloadFile } from '../../utils/file';
+import { expectNever } from "../../utils/expect";
 
 const File = styled(Stack)(({ theme }) => ({
   alignItems: 'center',
@@ -61,7 +62,7 @@ export interface FileMessageProps extends Omit<MessageBubbleProps, 'children'> {
   onDelete: VoidFunction;
 }
 
-export function FileMessage({ file, onDelete, ...restProps }: FileMessageProps) {
+export const FileMessage = observer(function FileMessage({ file, onDelete, ...restProps }: FileMessageProps) {
   const defaultActions: ContextAction[] = [{
     icon: <DeleteOutlineIcon />,
     label: 'Delete',
@@ -142,8 +143,17 @@ export function FileMessage({ file, onDelete, ...restProps }: FileMessageProps) 
         return null;
 
       case 'sending':
-      case 'receiving':
-        return <Progress size={56} color="inherit" variant="determinate" value={Math.round(file.status.progress * 100)} />;
+      case 'receiving': {
+        const { status } = file;
+
+        return (
+          <Observer>
+            {() => (
+              <Progress size={56} color="inherit" variant="determinate" value={status.progress} />
+            )}
+          </Observer>
+        );
+      };
 
       case 'sent':
       case 'received':
@@ -202,7 +212,7 @@ export function FileMessage({ file, onDelete, ...restProps }: FileMessageProps) 
         return expectNever(file.status);
     }
   }
-}
+});
 
 export function formatSize(bites: number): string {
   if (bites < 1024) return `${bites}B`;

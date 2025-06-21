@@ -1,4 +1,5 @@
 import { Fragment, MouseEvent, type MouseEventHandler } from 'react';
+import { observer } from 'mobx-react-lite';
 import AppBar from '@mui/material/AppBar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -14,9 +15,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
 import { DeviceModel } from '../models/Device';
 import Link from '@mui/material/Link';
-import { OnlineMarker } from './OnlineMarker';
 import { AvatarWithName } from './AvatarWithName';
 import { ChatToolbar } from './ChatToolbar';
+import { LastMessageText } from './LastMessageText';
 import { styled } from '@mui/material/styles';
 
 const PeersList = styled(List)(() => ({
@@ -34,7 +35,7 @@ export interface PeersProps {
   onDeviceMenuClick?: (device: DeviceModel, event: MouseEvent) => void;
 }
 
-export function Peers({ name, devices, onMenuClick, onRenameClick, onSelect, onDeviceMenuClick }: PeersProps) {
+export const Peers = observer(function Peers({ name, devices, onMenuClick, onRenameClick, onSelect, onDeviceMenuClick }: PeersProps) {
   return (
     <>
       <AppBar position="sticky">
@@ -84,13 +85,13 @@ export function Peers({ name, devices, onMenuClick, onRenameClick, onSelect, onD
             )}>
               <ListItemButton onClick={() => onSelect?.(device)}>
                 <ListItemAvatar>
-                  <AvatarWithName name={device.name} />
+                  <AvatarWithName name={device.name} isOnline={device.isOnline} />
                 </ListItemAvatar>
                 <ListItemText
                   primary={device.name}
-                  secondary={<OnlineMarker isOnline={device.isOnline} />}
+                  secondary={Boolean(device.messages.length) && <LastMessageText message={device.messages[device.messages.length - 1]} />}
                 />
-                {device.hasUpdates && <Badge color="primary" badgeContent="1" sx={{ mr: 3 }} aria-label={`Updates: ${1}`} />}
+                {Boolean(device.updates) && <Badge color="primary" badgeContent={device.updates} sx={{ mr: 3 }} aria-label={`Updates: ${device.updates}`} />}
               </ListItemButton>
             </ListItem>
             <Divider component="li" />
@@ -99,4 +100,4 @@ export function Peers({ name, devices, onMenuClick, onRenameClick, onSelect, onD
       </PeersList>
     </>
   );
-};
+});
