@@ -3,13 +3,14 @@ import { styled } from '@mui/material/styles';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { MessageBubble, type MessageBubbleProps } from "../MessageBubble";
 import { useCopyToClipboard } from '../CopyProvider';
-import { grey } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Direction } from '../../models/Message';
 
 const Content = styled('pre')(() => ({
   margin: 0,
-  maxWidth: '100%'
+  maxWidth: '100%',
+  whiteSpace: 'normal',
 }));
 
 interface CopyButtonProps {
@@ -63,14 +64,14 @@ export function TextMessage({ direction, children, onDelete, ...restProps }: Tex
           icon: <DeleteOutlineIcon />,
           label: 'Delete',
           callback: onDelete,
-          color: 'red'
+          color: red[500]
         }
       ]}
     >
       <CopyButton direction={direction} size="small" icon={<ContentCopyIcon color="inherit" />} label="copy" />
-      <Content sx={{ whiteSpace: 'normal' }}>
+      <Content>
         {children}
       </Content>
     </MessageBubble>
-);
+  );
 }

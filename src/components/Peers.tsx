@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, MouseEventHandler } from 'react';
+import { Fragment, MouseEvent, type MouseEventHandler } from 'react';
 import AppBar from '@mui/material/AppBar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -21,7 +21,6 @@ import { styled } from '@mui/material/styles';
 
 const PeersList = styled(List)(() => ({
   width: '100%',
-  minWidth: 360,
   margin: 0,
   padding: 0,
 }));
@@ -91,7 +90,7 @@ export function Peers({ name, devices, onMenuClick, onRenameClick, onSelect, onD
                   primary={device.name}
                   secondary={<OnlineMarker isOnline={device.isOnline} />}
                 />
-                {device.hasUpdates && <Badge color="primary" badgeContent="1" sx={{ mr: 3 }} aria-label="Has updates" />}
+                {device.hasUpdates && <Badge color="primary" badgeContent="1" sx={{ mr: 3 }} aria-label={`Updates: ${1}`} />}
               </ListItemButton>
             </ListItem>
             <Divider component="li" />

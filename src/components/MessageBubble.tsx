@@ -28,7 +28,7 @@ const MessageCard = styled(OutlinedCard)<MessageCardProps>(({ direction, theme }
       paddingBottom: 0,
       borderRadius: 12,
       overflow: 'visible',
-      transition: 'transform 0.4s ease-in-out',
+      transition: 'transform 0.3s',
       alignSelf: isSent ? 'end' : 'start',
       color: isSent ? grey[50] : '#0a0a0a',
       background: isSent ? grey[900] : grey[100],
@@ -143,10 +143,10 @@ export function MessageBubble({ direction, children, timestamp, contextActions, 
       <MessageCard
         {...restProps}
         direction={direction}
-        className={touchPosition ? 'touching' : undefined}
+        className={touchPosition && hasActions ? 'touching' : undefined}
         onContextMenu={handleContextMenu}
         onTouchStart={event => {
-          if (!event.touches.length) return;
+          if (!hasActions || !event.touches.length) return;
 
           setTouchPosition(getMenuPosition(event.touches[0]));
         }}
@@ -154,10 +154,12 @@ export function MessageBubble({ direction, children, timestamp, contextActions, 
         onTouchMove={endTouch}
         onTouchCancel={endTouch}
         onTransitionEnd={(event) => {
-          if (!touchPosition || event.target !== event.currentTarget) return;
+          if (!hasActions || !touchPosition || event.target !== event.currentTarget) return;
 
           setMenuPosition(touchPosition);
           setTouchPosition(null);
+
+          navigator.vibrate?.(200);
         }}
       >
         <div>
@@ -186,11 +188,6 @@ export function MessageBubble({ direction, children, timestamp, contextActions, 
           transformOrigin={{
             vertical: 'top',
             horizontal: direction === 'sent' ? 'right' : 'left',
-          }}
-          slotProps={{
-            list: {
-              dense: true,
-            },
           }}
         >
           {contextActions!.map(({ icon, label, callback, color }, index) => (

@@ -2,11 +2,12 @@ import Avatar from '@mui/material/Avatar';
 
 export interface AvatarWithNameProps {
   name: string;
+  size?: number;
 }
 
-export function AvatarWithName({ name }: AvatarWithNameProps) {
+export function AvatarWithName({ name, size }: AvatarWithNameProps) {
   return (
-    <Avatar>
+    <Avatar sx={size ? { width: size, height: size } : undefined}>
       {getShortName(name)}
     </Avatar>
   );
