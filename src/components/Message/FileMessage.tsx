@@ -1,6 +1,6 @@
 import { FileModel } from "../../models/File";
 import { MessageBubble, type MessageBubbleProps, type ContextAction } from "../MessageBubble";
-import { grey } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -21,8 +21,9 @@ const File = styled(Stack)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-const ActionContainer = styled(Box)(() => ({
+const ActionContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
+  padding: theme.spacing(0.5),
 }));
 
 const ActionIcon = styled(IconButton)(({ theme }) => ([
@@ -65,13 +66,13 @@ export function FileMessage({ file, onDelete, ...restProps }: FileMessageProps) 
     icon: <DeleteOutlineIcon />,
     label: 'Delete',
     callback: onDelete,
-    color: 'red'
+    color: red[500],
   }];
 
   return (
     <MessageBubble {...restProps} contextActions={getContextActions().concat(defaultActions)}>
       <File direction="row">
-        <ActionContainer sx={{ p: 0.5 }}>
+        <ActionContainer>
           {renderAction()}
           {renderProgress()}
         </ActionContainer>

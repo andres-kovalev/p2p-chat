@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
 import Snackbar from '@mui/material/Snackbar';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 type CopyFunction = (text: string) => void;
 
@@ -14,8 +13,7 @@ export interface CopyProviderProps {
 type CopyState = 'hidden' | 'success' | 'error';
 
 export function CopyProvider({ children }: CopyProviderProps) {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useIsMobile();
 
   const [copyState, setCopyState] = useState<CopyState>('hidden');
 
