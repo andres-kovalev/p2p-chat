@@ -1,3 +1,5 @@
+import { type ChangeEventHandler, useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -5,7 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import Stack, { StackProps } from '@mui/material/Stack';
 import { DeviceModel } from '../models/Device';
 import InputAdornment from '@mui/material/InputAdornment';
-import { OnlineMarker } from './OnlineMarker';
 import { AvatarWithName } from './AvatarWithName';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import SendIcon from '@mui/icons-material/Send';
@@ -14,7 +15,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/material/styles';
 import { Message } from './Message/Message';
 import { ChatToolbar } from './ChatToolbar';
-import { type ChangeEventHandler, useEffect, useRef, useState } from 'react';
 
 const Column = (props: Omit<StackProps, 'direction'>) => <Stack {...props} direction="column" />;
 
@@ -66,7 +66,7 @@ export interface MessagesProps {
   onBack: VoidFunction;
 }
 
-export function Messages({ device, onBack }: MessagesProps) {
+export const Messages = observer(function Messages({ device, onBack }: MessagesProps) {
   const [enabled, setIsEnabled] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -106,12 +106,11 @@ export function Messages({ device, onBack }: MessagesProps) {
           >
             <ArrowBackOutlinedIcon />
           </IconButton>
-          <AvatarWithName name={device.name} />
+          <AvatarWithName name={device.name} isOnline={device.isOnline} />
           <Column sx={{ ml: 2 }}>
             <Typography variant="body1" component="h1" sx={{ flexGrow: 1 }}>
               {device.name}
             </Typography>
-            <OnlineMarker isOnline={device.isOnline} />
           </Column>
         </ChatToolbar>
       </AppBar>
@@ -130,14 +129,16 @@ export function Messages({ device, onBack }: MessagesProps) {
         <OutlinedInput
           inputRef={inputRef}
           placeholder="Message"
+          autoFocus
           multiline
           maxRows={15}
           fullWidth
           size="small"
+          disabled={!device.isOnline}
           startAdornment={
             <>
               <InputAdornment position="start">
-                <IconButton component="label">
+                <IconButton component="label" disabled={!device.isOnline}>
                   <AttachFileIcon />
                   <VisuallyHiddenInput
                     type="file"
@@ -157,12 +158,14 @@ export function Messages({ device, onBack }: MessagesProps) {
           }
           endAdornment={
             <InputAdornment position="end">
-              <IconButton disabled={!enabled} onClick={sendMessage}><SendIcon /></IconButton>
+              <IconButton disabled={!enabled || !device.isOnline} onClick={sendMessage}><SendIcon /></IconButton>
             </InputAdornment>
           }
           onChange={checkEnabled}
           onKeyDown={event => {
             if (event.key === 'Enter' && !event.ctrlKey && !event.shiftKey && !event.metaKey) {
+              event.preventDefault();
+
               sendMessage();
             }
           }}
@@ -170,4 +173,4 @@ export function Messages({ device, onBack }: MessagesProps) {
       </SizeContainer>
     </Container>
   );
-};
+});

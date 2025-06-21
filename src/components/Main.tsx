@@ -1,14 +1,9 @@
+import { useCallback, useLayoutEffect, useRef, useState, type RefObject } from 'react';
+import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Stack, { StackProps } from '@mui/material/Stack';
-import { AvatarWithName } from './AvatarWithName';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
-import { useEffect, useRef, useState, type RefObject } from 'react';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Peers } from './Peers';
-import { Messages } from './Messages';
-import { RoomModel } from '../models/Room';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,6 +18,18 @@ import { red } from '@mui/material/colors';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import ListSubheader from '@mui/material/ListSubheader';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { RoomModel, RoomModelImpl } from '../models/Room';
+import { PWABackgroundColor } from './PWABackgroundColor';
+import { Peers } from './Peers';
+import { Messages } from './Messages';
+import { AvatarWithName } from './AvatarWithName';
+import { useModel } from './ContainerProvider';
+import { AppModel } from '../models/App';
+import { useEscapeHandler } from '../hooks/useEscapeHandler';
+import { useTheme } from '@mui/material/styles';
+
+const APPBAR_BG_WITH_GRADIENT = '#272727';
 
 const Row = (props: Omit<StackProps, 'direction'>) => <Stack {...props} direction="row" />
 
@@ -47,19 +54,24 @@ const PeersContainer = styled(Box)(({ theme }) => ({
 }));
 
 export interface MainProps {
-  room: RoomModel;
   onLogout: VoidFunction;
 }
 
-export function Main({ room, onLogout }: MainProps) {
+export const Main = observer(function Main({ onLogout }: MainProps) {
+  const app = useModel(AppModel);
+  const room: RoomModel = useModel(RoomModelImpl);
+
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const [ peersContainerRef, dividerRef ] = useHorizontalResize();
+  const isMobile = useIsMobile();
 
-  const [mode, setMode] = useState<'system' | 'light' | 'dark'>('system');
-  const toggleSystemMode = () => setMode(mode === 'system' ? 'light' : 'system');
-  const toggleDarkMode = () => setMode(mode === 'dark' ? 'light' : 'dark');
+  const updateSize = useCallback((size: number) => {
+    room.panelSize = size;
+  }, [room]);
+  const [ peersContainerRef, dividerRef ] = useHorizontalResize(room.panelSize, updateSize);
+
+  const toggleSystemMode = () => app.setTheme(app.theme === 'system' ? 'light' : 'system');
+  const toggleDarkMode = () => app.setTheme(app.theme === 'dark' ? 'light' : 'dark');
 
   const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement | null>(null);
   const isMenuShown = Boolean(menuAnchorElement);
@@ -67,8 +79,14 @@ export function Main({ room, onLogout }: MainProps) {
 
   const isSelected = Boolean(room.current);
 
+  const unselect = useCallback(() => {
+    room.current = undefined;
+  }, [room]);
+
+  useEscapeHandler(unselect);
+
   return (
-    <>
+    <PWABackgroundColor color={app.isDarkTheme ? APPBAR_BG_WITH_GRADIENT : theme.palette.primary.main}>
       <Container>
         {(!isMobile || !isSelected) && (
           <>
@@ -86,7 +104,10 @@ export function Main({ room, onLogout }: MainProps) {
               component="div"
               orientation="vertical"
               flexItem
-              sx={{ position: 'relative' }}
+              sx={{
+                position: 'relative',
+                display: isMobile ? 'none' : undefined
+              }}
               ref={dividerRef}
             />
           </>
@@ -121,7 +142,7 @@ export function Main({ room, onLogout }: MainProps) {
             </ListItemButton>
           </ListItem>
         </List>
-        <List subheader={<ListSubheader>Theme</ListSubheader>}>
+        <List subheader={<ListSubheader sx={{ background: 'transparent' }}>Theme</ListSubheader>}>
           <ListItem disablePadding>
             <ListItemButton onClick={toggleSystemMode}>
               <ListItemIcon>
@@ -130,7 +151,7 @@ export function Main({ room, onLogout }: MainProps) {
               <ListItemText primary="System" id="system-mode-switch-label" />
               <Switch
                 edge="end"
-                checked={mode === 'system'}
+                checked={app.theme === 'system'}
                 inputProps={{
                   'aria-labelledby': 'system-mode-switch-label',
                 }}
@@ -138,15 +159,14 @@ export function Main({ room, onLogout }: MainProps) {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={toggleDarkMode}>
+            <ListItemButton onClick={toggleDarkMode} disabled={app.theme === 'system'}>
               <ListItemIcon>
                 <DarkModeIcon />
               </ListItemIcon>
               <ListItemText primary="Dark" id="dark-mode-switch-label" />
               <Switch
                 edge="end"
-                // onChange={() => setMode(mode === 'dark' ? 'light' : 'dark')}
-                checked={mode === 'dark'}
+                checked={app.theme === 'dark'}
                 inputProps={{
                   'aria-labelledby': 'dark-mode-switch-label',
                 }}
@@ -177,7 +197,7 @@ export function Main({ room, onLogout }: MainProps) {
           <ListItemText>{room.roomName}</ListItemText>
         </MenuItem>
         <Divider />
-        <ListSubheader>Theme</ListSubheader>
+        <ListSubheader sx={{ background: 'transparent' }}>Theme</ListSubheader>
         <MenuItem onClick={toggleSystemMode}>
           <ListItemIcon>
             <ContrastIcon />
@@ -185,20 +205,20 @@ export function Main({ room, onLogout }: MainProps) {
           <ListItemText id='system-mode-menu-switch-label'>System</ListItemText>
           <Switch
             edge="end"
-            checked={mode === 'system'}
+            checked={app.theme === 'system'}
             inputProps={{
               'aria-labelledby': 'system-mode-menu-switch-label',
             }}
           />
         </MenuItem>
-        <MenuItem onClick={toggleDarkMode} disabled={mode === 'system'}>
+        <MenuItem onClick={toggleDarkMode} disabled={app.theme === 'system'}>
           <ListItemIcon>
             <DarkModeIcon />
           </ListItemIcon>
           <ListItemText id='system-mode-menu-switch-label'>Dark</ListItemText>
           <Switch
             edge="end"
-            checked={mode === 'dark'}
+            checked={app.theme === 'dark'}
             inputProps={{
               'aria-labelledby': 'system-mode-menu-switch-label',
             }}
@@ -212,15 +232,15 @@ export function Main({ room, onLogout }: MainProps) {
           <ListItemText>Logout</ListItemText>
         </MenuItem>
       </Menu>
-    </>
+    </PWABackgroundColor>
   );
-}
+});
 
-function useHorizontalResize<C extends HTMLElement, H extends HTMLElement = HTMLDivElement>(): [ RefObject<C | null>, RefObject<H | null> ] {
+function useHorizontalResize<C extends HTMLElement, H extends HTMLElement = HTMLDivElement>(initialSize: number | undefined, onChange: (size: number) => void): [ RefObject<C | null>, RefObject<H | null> ] {
   const containerRef = useRef<C>(null);
   const dividerRef = useRef<H>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!dividerRef.current) return;
 
     if (!dividerRef.current.children.length) {
@@ -228,6 +248,15 @@ function useHorizontalResize<C extends HTMLElement, H extends HTMLElement = HTML
     }
 
     const container = containerRef.current;
+    const updateSize = (size: number) => {
+      if (container) {
+        container.style.width = `${size}px`;
+      }
+    }
+    if (initialSize) {
+      updateSize(initialSize);
+    }
+
     const handle = dividerRef.current.children[0] as HTMLDivElement;
 
     let dragging = false;
@@ -249,13 +278,14 @@ function useHorizontalResize<C extends HTMLElement, H extends HTMLElement = HTML
 
       cancelEvent(event);
       dragging = false;
+      onChange(initialWidth + event.clientX - initialX);
     };
 
     const handleMouseMove = (event: MouseEvent) => {
       if (!dragging || !container) return;
 
       cancelEvent(event);
-      container.style.width = `${initialWidth + event.clientX - initialX}px`;
+      updateSize(initialWidth + event.clientX - initialX);
     }
 
     handle.addEventListener('mousedown', handleMouseDown);
@@ -267,7 +297,7 @@ function useHorizontalResize<C extends HTMLElement, H extends HTMLElement = HTML
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [onChange]);
 
   return [ containerRef, dividerRef ];
 }
