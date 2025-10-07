@@ -1,5 +1,5 @@
 import { container, type DependencyContainer } from 'tsyringe';
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { Credentials } from '../types';
 
 const ContainerContext = createContext<DependencyContainer>(container);
@@ -17,6 +17,8 @@ export function ContainerProvider({ credentials, children }: ContainerProviderPr
 
     return child;
   });
+
+  useEffect(() => () => void childContainer.dispose(), [childContainer]);
 
   return (
     <ContainerContext.Provider value={childContainer}>

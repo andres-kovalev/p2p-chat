@@ -15,6 +15,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/material/styles';
 import { Message } from './Message/Message';
 import { ChatToolbar } from './ChatToolbar';
+import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
+// import VideocamOffOutlinedIcon from '@mui/icons-material/VideocamOffOutlined';
+// import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
+// import MicOffOutlinedIcon from '@mui/icons-material/MicOffOutlined';
+// import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+// import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
+// import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 
 const Column = (props: Omit<StackProps, 'direction'>) => <Stack {...props} direction="column" />;
 
@@ -24,6 +31,8 @@ const Container = styled(Column)(() => ({
   maxHeight: '100%',
   justifyContent: 'stretch',
   alignItems: 'center',
+
+  position: 'relative',
 }));
 
 const SizeContainer = styled(Box)(({ theme }) => ({
@@ -112,6 +121,15 @@ export const Messages = observer(function Messages({ device, onBack }: MessagesP
               {device.name}
             </Typography>
           </Column>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="Video call"
+            onClick={() => {/*device.stream()*/}}
+          >
+            <VideocamOutlinedIcon />
+          </IconButton>
         </ChatToolbar>
       </AppBar>
       <MessagesContainer>

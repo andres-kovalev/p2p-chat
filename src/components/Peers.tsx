@@ -1,24 +1,16 @@
-import { Fragment, MouseEvent, type MouseEventHandler } from 'react';
+import { MouseEvent, type MouseEventHandler } from 'react';
 import { observer } from 'mobx-react-lite';
 import AppBar from '@mui/material/AppBar';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
 import { DeviceModel } from '../models/Device';
 import Link from '@mui/material/Link';
-import { AvatarWithName } from './AvatarWithName';
 import { ChatToolbar } from './ChatToolbar';
-import { LastMessageText } from './LastMessageText';
 import { styled } from '@mui/material/styles';
+import { Peer } from './Peer';
 
 const PeersList = styled(List)(() => ({
   width: '100%',
@@ -77,25 +69,12 @@ export const Peers = observer(function Peers({ name, devices, onMenuClick, onRen
       </AppBar>
       <PeersList>
         {devices.map((device) => (
-          <Fragment key={device.peerId}>
-            <ListItem disablePadding secondaryAction={onDeviceMenuClick && (
-              <IconButton aria-label="Actions" onClick={event => onDeviceMenuClick(device, event)}>
-                <MoreHorizIcon />
-              </IconButton>
-            )}>
-              <ListItemButton onClick={() => onSelect?.(device)}>
-                <ListItemAvatar>
-                  <AvatarWithName name={device.name} isOnline={device.isOnline} />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={device.name}
-                  secondary={Boolean(device.messages.length) && <LastMessageText message={device.messages[device.messages.length - 1]} />}
-                />
-                {Boolean(device.updates) && <Badge color="primary" badgeContent={device.updates} sx={{ mr: 3 }} aria-label={`Updates: ${device.updates}`} />}
-              </ListItemButton>
-            </ListItem>
-            <Divider component="li" />
-          </Fragment>
+          <Peer
+            key={device.peerId}
+            device={device}
+            onSelect={onSelect}
+            onDeviceMenuClick={onDeviceMenuClick}
+          />
         ))}
       </PeersList>
     </>

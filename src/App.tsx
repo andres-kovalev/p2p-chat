@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import { useMemo } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CopyProvider } from './components/CopyProvider'
@@ -38,8 +37,7 @@ const darkTheme = createTheme({
 export const App = observer(function App() {
   const app = useModel(AppModel);
 
-  const isDark = app.isDarkTheme;
-  const theme = useMemo(() => isDark ? darkTheme : lightTheme, [isDark]);
+  const theme = app.isDarkTheme ? darkTheme : lightTheme;
 
   return (
     <PWABackgroundColor color={theme.palette.background.default}>
@@ -48,7 +46,7 @@ export const App = observer(function App() {
         <CopyProvider>
           {app.credentials ? (
             <ContainerProvider credentials={app.credentials}>
-              <Main onLogout={() => app.logout()} />
+              <Main />
             </ContainerProvider>
           ) : (
             <Login onLogin={(credentials) => app.login(credentials)} />

@@ -113,6 +113,43 @@ export class RoomService implements Disposable {
     }, peerId);
   }
 
+  // #currentStream?: {
+  //   stream: MediaStream,
+  //   peerId: string
+  // } = undefined;
+
+  // sendStream(stream: MediaStream, peerId: string): boolean {
+  //   if (this.#currentStream) return false;
+
+  //   this.#room.addStream(stream, peerId);
+  //   this.#currentStream = { stream, peerId };
+
+  //   return true;
+  // }
+
+  // stopStreaming(): void {
+  //   if (!this.#currentStream) return;
+
+  //   this.#room.removeStream(this.#currentStream.stream, this.#currentStream.peerId);
+  //   this.#currentStream = undefined;
+  // }
+
+  // addTrack(track: MediaStreamTrack) {
+  //   if (!this.#currentStream) return;
+
+  //   this.#room.addTrack(track, this.#currentStream.stream, this.#currentStream.peerId);
+  // }
+
+  // removeTrack(track: MediaStreamTrack) {
+  //   if (!this.#currentStream) return;
+
+  //   this.#room.removeTrack(track, this.#currentStream.peerId);
+  // }
+
+  // onPeerStream(listener: PeerListener<MediaStream>) {
+  //   this.#room.onPeerStream(listener);
+  // }
+
   dispose() {
     this.#room.leave();
   }

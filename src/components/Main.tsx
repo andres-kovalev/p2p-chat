@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, /* useEffect, */ useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { observer } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Stack, { StackProps } from '@mui/material/Stack';
@@ -28,6 +28,8 @@ import { useModel } from './ContainerProvider';
 import { AppModel } from '../models/App';
 import { useEscapeHandler } from '../hooks/useEscapeHandler';
 import { useTheme } from '@mui/material/styles';
+import { CallScreen } from './CallScreen';
+import { IncomingCall } from './IncomingCall'
 
 const APPBAR_BG_WITH_GRADIENT = '#272727';
 
@@ -53,13 +55,11 @@ const PeersContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export interface MainProps {
-  onLogout: VoidFunction;
-}
-
-export const Main = observer(function Main({ onLogout }: MainProps) {
+export const Main = observer(function Main() {
   const app = useModel(AppModel);
   const room: RoomModel = useModel(RoomModelImpl);
+
+  room.call = { end(){} };
 
   const theme = useTheme();
 
@@ -84,6 +84,30 @@ export const Main = observer(function Main({ onLogout }: MainProps) {
   }, [room]);
 
   useEscapeHandler(unselect);
+
+  const [callState, setCallState] = useState<'incoming' | 'ongoing' | 'discarded'>('incoming');
+  // const videoContainerRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   let video: HTMLVideoElement | undefined;
+
+  //   room.onStream(stream => {
+  //     if (!video) {
+  //       video = document.createElement('video');
+  //       video.autoplay = true;
+
+  //       if (!videoContainerRef.current) {
+  //         throw new Error('Where is video container!?');
+  //       }
+
+  //       videoContainerRef.current.appendChild(video);
+  //     }
+
+  //     if (video!.srcObject !== stream) {
+  //       video!.srcObject = stream;
+  //     }
+  //   });
+  // }, [room]);
 
   return (
     <PWABackgroundColor color={app.isDarkTheme ? APPBAR_BG_WITH_GRADIENT : theme.palette.primary.main}>
@@ -175,7 +199,7 @@ export const Main = observer(function Main({ onLogout }: MainProps) {
           </ListItem>
           <Divider />
           <ListItem disablePadding>
-            <ListItemButton onClick={onLogout} sx={{ color: red[500] }}>
+            <ListItemButton onClick={() => app.logout()} sx={{ color: red[500] }}>
               <ListItemIcon sx={{ color: red[500] }}>
                 <LogoutIcon />
               </ListItemIcon>
@@ -225,13 +249,26 @@ export const Main = observer(function Main({ onLogout }: MainProps) {
           />
         </MenuItem>
         <Divider />
-        <MenuItem onClick={onLogout} sx={{ color: red[500] }}>
+        <MenuItem onClick={() => app.logout()} sx={{ color: red[500] }}>
           <ListItemIcon sx={{ color: red[500] }}>
             <LogoutIcon />
           </ListItemIcon>
           <ListItemText>Logout</ListItemText>
         </MenuItem>
       </Menu>
+      {/* <div ref={videoContainerRef} style={{ position: 'fixed', bottom: 40, right: 40, width: 500, height: 500, background: 'red' }} /> */}
+      {callState === 'incoming' && <IncomingCall
+        callerName="test-name"
+        callerAvatar='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEX////MzMw46qqDAAAALklEQVQ4y2NgYOD//x9KMIzy4Lz//z8giFEejBhUcTSYeIMpjgYTbzDF0SDiAQCuKlXHaLdehAAAAABJRU5ErkJggg=='
+        onAccept={() => setCallState('ongoing')}
+        onDecline={() => setCallState('discarded')}
+       />}
+      {callState === 'ongoing' && <CallScreen
+        userName="test-name"
+        userAvatar='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEX////MzMw46qqDAAAALklEQVQ4y2NgYOD//x9KMIzy4Lz//z8giFEejBhUcTSYeIMpjgYTbzDF0SDiAQCuKlXHaLdehAAAAABJRU5ErkJggg=='
+        onEndCall={() => setCallState('discarded')}
+        isVideoCall
+      />}
     </PWABackgroundColor>
   );
 });

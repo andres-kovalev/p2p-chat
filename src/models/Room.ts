@@ -5,6 +5,7 @@ import { createDevice, type DeviceModel } from "./Device";
 import { RoomService } from "../services/RoomService";
 import { StorageService } from '../services/StorageService';
 import { assertNumber } from '../utils/assert';
+import { Call } from './Call';
 
 export interface RoomModel extends Disposable {
   readonly roomName: string;
@@ -16,6 +17,8 @@ export interface RoomModel extends Disposable {
   current: DeviceModel | undefined;
 
   panelSize: number | undefined;
+
+  call?: Call;
 }
 
 @scoped(Lifecycle.ContainerScoped)
@@ -44,6 +47,8 @@ export class RoomModelImpl implements RoomModel {
   #id = 0;
 
   #panelSize: number | undefined;
+
+  call?: Call = undefined;
 
   constructor(
     @inject('Credentials') credentials: Credentials,
