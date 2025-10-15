@@ -1,10 +1,10 @@
 import Chip from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { styled } from '@mui/material/styles';
+import { grey, red } from '@mui/material/colors';
 import { MessageBubble, type MessageBubbleProps } from "../MessageBubble";
 import { useCopyToClipboard } from '../CopyProvider';
-import { grey, red } from '@mui/material/colors';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Direction } from '../../models/Message';
 
 const Content = styled('pre')(() => ({

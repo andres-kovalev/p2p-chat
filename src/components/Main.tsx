@@ -7,7 +7,6 @@ import { styled } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import LogoutIcon from '@mui/icons-material/Logout';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -15,20 +14,21 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
 import { red } from '@mui/material/colors';
+import ListSubheader from '@mui/material/ListSubheader';
+import LogoutIcon from '@mui/icons-material/Logout';
 import ContrastIcon from '@mui/icons-material/Contrast';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import ListSubheader from '@mui/material/ListSubheader';
+import { useTheme } from '@mui/material/styles';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { RoomModel, RoomModelImpl } from '../models/Room';
+import { AppModel } from '../models/App';
+import { useEscapeHandler } from '../hooks/useEscapeHandler';
 import { PWABackgroundColor } from './PWABackgroundColor';
 import { Peers } from './Peers';
 import { Messages } from './Messages';
 import { AvatarWithName } from './AvatarWithName';
 import { useModel } from './ContainerProvider';
-import { AppModel } from '../models/App';
-import { useEscapeHandler } from '../hooks/useEscapeHandler';
-import { useTheme } from '@mui/material/styles';
-import { CallScreen } from './CallScreen';
+import { OngoingCall } from './OngoingCall';
 import { IncomingCall } from './IncomingCall'
 
 const APPBAR_BG_WITH_GRADIENT = '#272727';
@@ -263,7 +263,7 @@ export const Main = observer(function Main() {
         onAccept={() => setCallState('ongoing')}
         onDecline={() => setCallState('discarded')}
        />}
-      {callState === 'ongoing' && <CallScreen
+      {callState === 'ongoing' && <OngoingCall
         userName="test-name"
         userAvatar='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAABlBMVEX////MzMw46qqDAAAALklEQVQ4y2NgYOD//x9KMIzy4Lz//z8giFEejBhUcTSYeIMpjgYTbzDF0SDiAQCuKlXHaLdehAAAAABJRU5ErkJggg=='
         onEndCall={() => setCallState('discarded')}
@@ -334,7 +334,7 @@ function useHorizontalResize<C extends HTMLElement, H extends HTMLElement = HTML
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [onChange]);
+  }, [onChange, initialSize]);
 
   return [ containerRef, dividerRef ];
 }

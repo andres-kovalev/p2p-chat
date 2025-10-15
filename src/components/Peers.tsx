@@ -4,12 +4,12 @@ import AppBar from '@mui/material/AppBar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import EditIcon from '@mui/icons-material/Edit';
-import { DeviceModel } from '../models/Device';
-import Link from '@mui/material/Link';
-import { ChatToolbar } from './ChatToolbar';
 import { styled } from '@mui/material/styles';
+import { DeviceModel } from '../models/Device';
+import { ChatToolbar } from './ChatToolbar';
 import { Peer } from './Peer';
 
 const PeersList = styled(List)(() => ({

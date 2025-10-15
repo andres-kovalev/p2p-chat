@@ -1,68 +1,40 @@
 import { type JSX } from 'react';
-import {
-  Box,
-  Avatar,
-  Typography,
-  styled,
-} from '@mui/material';
-import {
-  CallEnd,
-  Call
-} from '@mui/icons-material';
-
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { CallContainer } from './CallContainer';
 import { CallButton } from './CallButton';
+import { CallAvatar } from './CallAvatar';
+import { CallActionsContainer } from './CallActionsContainer';
 
-const IncomingCallContainer = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column',
-  backgroundColor: '#181c1f',
+const Container = styled(CallContainer)({
   alignItems: 'center',
   justifyContent: 'center',
-  position: 'absolute',
-  left: 0,
-  top: 0,
-  right: 0,
-  bottom: 0,
-  zIndex: 1101,
 });
 
-const CallerBox = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column',
+const CallerBox = styled(Stack)({
   alignItems: 'center',
   justifyContent: 'center',
   padding: '56px 48px 48px 48px'
-});
-
-const StyledAvatar = styled(Avatar)({
-  width: 164,
-  height: 164,
-  marginBottom: 32,
-  fontSize: 68,
 });
 
 interface ButtonsContainerProps {
   isMobile?: boolean;
 }
 
-const ButtonsContainer = styled('div')<ButtonsContainerProps>(({ isMobile }) => ({
-  display: 'flex',
-  gap: 96,
+const ButtonsContainer = styled(CallActionsContainer)<ButtonsContainerProps>(({ isMobile }) => ({
   width: '100%',
   justifyContent: isMobile ? 'space-between' : 'center',
-  position: 'absolute',
-  bottom: 0,
-  left: '50%',
-  transform: 'translateX(-50%)',
-  padding: '32px 48px'
 }));
 
 interface IncomingCallProps {
   callerName: string;
   callerAvatar?: string;
-  onAccept: () => void;
-  onDecline: () => void;
+  onAccept: VoidFunction;
+  onDecline: VoidFunction;
 }
 
 export const IncomingCall = ({
@@ -74,11 +46,11 @@ export const IncomingCall = ({
   const isMobile = useIsMobile();
 
   return (
-    <IncomingCallContainer>
+    <Container>
       <CallerBox>
-        <StyledAvatar src={callerAvatar} alt={callerName}>
+        <CallAvatar src={callerAvatar} alt={callerName}>
           {callerName?.charAt(0).toUpperCase()}
-        </StyledAvatar>
+        </CallAvatar>
         <Typography variant="h4" color="white" fontWeight={600} gutterBottom>
           {callerName}
         </Typography>
@@ -86,26 +58,30 @@ export const IncomingCall = ({
           Incoming call
         </Typography>
       </CallerBox>
-      <ButtonsContainer isMobile={isMobile}>
+      <ButtonsContainer
+        direction="row"
+        spacing={12}
+        isMobile={isMobile}
+      >
         <CallButton
           label="Decline"
           variant="error"
-          size={96}
+          size={80}
           onClick={onDecline}
           aria-label="Decline call"
         >
-          <CallEnd sx={{ fontSize: 48 }} />
+          <CloseIcon sx={{ fontSize: 48 }} />
         </CallButton>
         <CallButton
           label="Accept"
           variant="active"
-          size={96}
+          size={80}
           onClick={onAccept}
           aria-label="Accept call"
         >
-          <Call sx={{ fontSize: 48 }} />
+          <CheckIcon sx={{ fontSize: 48 }} />
         </CallButton>
       </ButtonsContainer>
-    </IncomingCallContainer>
+    </Container>
   );
 };

@@ -1,10 +1,8 @@
 import { type JSX, type ReactNode } from 'react';
-import {
-  Box,
-  Typography,
-  IconButton,
-  styled
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material';
 
 type ButtonVariant = 'active' | 'error' | 'default';
 

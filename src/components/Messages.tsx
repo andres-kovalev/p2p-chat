@@ -7,21 +7,16 @@ import IconButton from '@mui/material/IconButton';
 import Stack, { StackProps } from '@mui/material/Stack';
 import { DeviceModel } from '../models/Device';
 import InputAdornment from '@mui/material/InputAdornment';
-import { AvatarWithName } from './AvatarWithName';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { styled } from '@mui/material/styles';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import { styled } from '@mui/material/styles';
-import { Message } from './Message/Message';
-import { ChatToolbar } from './ChatToolbar';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
-// import VideocamOffOutlinedIcon from '@mui/icons-material/VideocamOffOutlined';
-// import MicNoneOutlinedIcon from '@mui/icons-material/MicNoneOutlined';
-// import MicOffOutlinedIcon from '@mui/icons-material/MicOffOutlined';
-// import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
-// import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
-// import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
+import CallIcon from '@mui/icons-material/Call';
+import { AvatarWithName } from './AvatarWithName';
+import { ChatToolbar } from './ChatToolbar';
+import { Message } from './Message/Message';
 
 const Column = (props: Omit<StackProps, 'direction'>) => <Stack {...props} direction="column" />;
 
@@ -116,11 +111,20 @@ export const Messages = observer(function Messages({ device, onBack }: MessagesP
             <ArrowBackOutlinedIcon />
           </IconButton>
           <AvatarWithName name={device.name} isOnline={device.isOnline} />
-          <Column sx={{ ml: 2 }}>
-            <Typography variant="body1" component="h1" sx={{ flexGrow: 1 }}>
+          {/* <Column sx={{ ml: 2 }}> */}
+            <Typography variant="body1" component="h1" sx={{ ml: 2, flexGrow: 1 }}>
               {device.name}
             </Typography>
-          </Column>
+          {/* </Column> */}
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="Call"
+            onClick={() => {/*device.stream()*/}}
+          >
+            <CallIcon />
+          </IconButton>
           <IconButton
             size="large"
             edge="start"
