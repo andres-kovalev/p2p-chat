@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 394.2 394.2">
-  <rect width="394.248" height="394.248" rx="24" fill="#F5F8FF" style="stroke-width: 1.86;"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0);" d="M 263.097 81.88 C 263.048 80.4 253.287 127.164 253.33 128.45" id="object-1"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0);" d="M 254.899 126.474 C 254.218 127.861 118.31 83.912 118.91 82.704" id="object-2"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0);" d="M 341.518 159.389 C 341.074 160.521 252.499 127.576 252.89 126.717" id="object-3"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0);" d="M 341.549 160.113 C 341.116 158.803 258.163 200.178 258.596 201.315" id="object-4"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0);" d="M 342.599 160.292 C 342.285 156.793 282.309 267.24 282.622 270.273" id="object-5"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0);" d="M 283.974 269.51 C 283.837 271.698 257.696 202.594 257.833 200.694" id="object-6"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" d="M 257.833 200.638 C 257.812 203.036 253.939 127.306 253.959 125.224" id="object-7" transform="matrix(-1, 0, 0, -1, 0.000025, 0.000014)"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 202.116px 148.09px;" d="M 255.415 128.359 C 254.837 127.102 148.268 166.76 148.817 167.85" id="object-8"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 202.717px 185.576px;" d="M 258.117 201.997 C 257.517 203.041 146.745 170.04 147.316 169.132" id="object-9" transform="matrix(-1, 0, 0, -1, 0.000027, -0.00002)"/>
-  <path style="fill: none; stroke-width: 6px; stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" d="M 257.833 200.731 C 257.403 199.167 175.379 248.515 175.809 249.871" id="object-10" transform="matrix(-1, 0, 0, -1, -0.000005, -0.000012)"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 229.892px 259.862px;" d="M 283.865 269.208 C 283.3 269.803 175.356 251.019 175.923 250.502" id="object-11" transform="matrix(-1, 0, 0, -1, 0.000019, -0.000022)"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 163.149px 209.173px;" d="M 178.068 250.243 C 177.907 252.855 148.075 170.317 148.23 168.045" id="object-12" transform="matrix(-1, 0, 0, -1, -0.000022, -0.000025)"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 132.861px 125.904px;" d="M 150.446 167.027 C 150.257 169.643 115.09 86.998 115.28 84.725" id="object-13"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 124.766px 246.951px;" d="M 151.205 167.582 C 150.918 162.534 98.05 322.042 98.33 326.433" id="object-14"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 138.005px 288.993px;" d="M 178.847 250.805 C 178.405 248.376 96.74 325.124 97.16 327.236" id="object-15"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 114.564px 217.921px;" d="M 177.896 251.893 C 177.212 254.054 50.57 185.782 51.23 183.903" id="object-16" transform="matrix(-1, 0, 0, -1, 0.00001, 0.000004)"/>
-  <path style="fill: none; stroke-width: 6; stroke: rgb(0, 0, 0); transform-origin: 100.335px 173.497px;" d="M 150.025 167.331 C 149.488 166.938 50.13 179.331 50.64 179.671" id="object-17" transform="matrix(-1, 0, 0, -1, 0.000005, 0.000011)"/>
-  <path style="fill: none; stroke-width: 10px; stroke: rgb(0, 0, 0);" d="M 95.63 330.59 L 166.802 286.419 C 191.592 290.888 257.353 285.949 283.339 269.425 C 334.083 245.323 348.711 187.268 340.682 161.015 C 334.292 130.271 294.708 91.862 264.223 81.745 C 214.097 65.11 139.81 70.037 106.62 94.192 C 75.75 116.665 55.08 148.766 53.89 181.594 C 52.7 214.166 80.11 247.201 95.25 260.647 L 95.63 330.59 Z" id="object-18"/>
-  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" cx="117.22" cy="84.087" rx="16.08" ry="16.08" id="object-19"/>
-  <ellipse style="stroke-width: 0px; transform-origin: 263.815px 78.183px;" cx="263.815" cy="78.183" rx="16.08" ry="16.08" id="object-0"/>
-  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0); transform-origin: 341.737px 158.82px;" cx="341.737" cy="158.82" rx="16.08" ry="16.08" id="object-20"/>
-  <ellipse style="stroke-width: 0px; transform-origin: 282.978px 269.644px;" cx="282.978" cy="269.644" rx="16.08" ry="16.08" id="object-21"/>
-  <ellipse style="stroke-width: 0px; transform-origin: 177.833px 250.86px;" cx="177.833" cy="250.86" rx="16.08" ry="16.08" id="object-22"/>
-  <ellipse style="stroke-width: 0px; transform-origin: 257.553px 201.44px;" cx="257.553" cy="201.44" rx="16.08" ry="16.08" id="object-23"/>
-  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0); transform-origin: 148.974px 166.994px;" cx="148.974" cy="166.994" rx="16.08" ry="16.08" id="object-24"/>
-  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0); transform-origin: 52.568px 183.197px;" cx="52.57" cy="183.197" rx="16.08" ry="16.08" id="object-25"/>
-  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0); transform-origin: 97.66px 325.416px;" cx="97.66" cy="325.416" rx="16.08" ry="16.08" id="object-26"/>
-  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0); transform-origin: 254.244px 128.011px;" cx="254.244" cy="128.011" rx="16.08" ry="16.08" id="object-27"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 382 382">
+  <rect width="382" height="382" style="fill: rgb(255, 255, 255);"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 268.972 47.129 C 268.914 45.375 257.35 100.781 257.4 102.304" id="object-1"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 259.259 99.964 C 258.452 101.606 97.431 49.536 98.146 48.105" id="object-2"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 361.885 138.961 C 361.359 140.302 256.416 101.269 256.879 100.251" id="object-3"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 361.922 139.818 C 361.408 138.266 263.127 187.287 263.639 188.634" id="object-4"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 363.165 140.03 C 362.794 135.885 291.734 266.742 292.105 270.335" id="object-5"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 293.707 269.431 C 293.544 272.023 262.573 190.15 262.736 187.898" id="object-6"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 262.736 187.832 C 262.711 190.673 258.122 100.949 258.145 98.483" id="object-7"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 259.87 102.196 C 259.186 100.707 132.924 147.693 133.575 148.985" id="object-8"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 263.072 189.442 C 262.361 190.679 131.119 151.58 131.796 150.504" id="object-9"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 262.736 187.942 C 262.226 186.09 165.045 244.556 165.555 246.163" id="object-10"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 293.578 269.073 C 292.908 269.778 165.017 247.523 165.689 246.91" id="object-11"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 170.231 246.604 C 168.04 249.699 135.696 151.908 132.879 149.217" id="object-12"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 135.505 148.01 C 135.28 151.109 93.618 53.192 93.834 50.5" id="object-13"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 136.403 148.668 C 136.063 142.687 73.43 331.67 73.756 336.873" id="object-14"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 169.154 247.269 C 168.63 244.392 71.874 335.322 72.377 337.824" id="object-15"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 168.027 244.558 C 167.217 246.119 17.175 165.231 17.954 168.005" id="object-16"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 7px;" d="M 135.005 150.371 C 134.369 147.904 16.648 164.588 17.26 162.991" id="object-17"/>
+  <path style="fill: none; stroke: rgb(0, 0, 0); stroke-width: 12px;" d="M 70.564 341.798 L 154.882 289.465 C 184.254 294.759 262.167 288.908 292.955 269.331 C 353.075 240.775 370.407 171.992 360.895 140.887 C 353.323 104.462 306.424 58.955 270.306 46.968 C 210.918 27.259 122.903 33.097 83.586 61.716 C 47.005 88.341 22.517 126.374 21.102 165.269 C 19.698 203.86 52.166 242.999 70.112 258.93 L 70.564 341.798 Z" id="object-18"/>
+  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0);" cx="96.138" cy="49.743" rx="19.051" ry="19.051" id="object-19"/>
+  <ellipse style="stroke-width: 0px;" cx="269.823" cy="42.748" rx="19.051" ry="19.051" id="object-0"/>
+  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0);" cx="362.144" cy="138.287" rx="19.051" ry="19.051" id="object-20"/>
+  <ellipse style="stroke-width: 0px;" cx="292.528" cy="269.59" rx="19.051" ry="19.051" id="object-21"/>
+  <ellipse style="stroke-width: 0px;" cx="167.952" cy="247.334" rx="19.051" ry="19.051" id="object-22"/>
+  <ellipse style="stroke-width: 0px;" cx="262.403" cy="188.782" rx="19.051" ry="19.051" id="object-23"/>
+  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0);" cx="133.76" cy="147.971" rx="19.051" ry="19.051" id="object-24"/>
+  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0);" cx="19.539" cy="167.168" rx="19.051" ry="19.051" id="object-25"/>
+  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0);" cx="72.964" cy="335.668" rx="19.051" ry="19.051" id="object-26"/>
+  <ellipse style="stroke-width: 0px; stroke: rgb(0, 0, 0);" cx="258.483" cy="101.784" rx="19.051" ry="19.051" id="object-27"/>
 </svg>

@@ -9,4 +9,5 @@ export default defineConfig({
     },
     preset,
     images: ['public/favicon.svg'],
+    // images: ['public/favicon.ico', 'public/apple-touch-icon.png', 'public/pwa-192x192.png', 'public/pwa-512x512.png'],
 })
