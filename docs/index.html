@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P File Transfer (Serverless)</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; line-height: 1.6; background: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; font-family: monospace; font-size: 12px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        button:disabled { background: #ccc; }
+        #status { font-weight: bold; color: #d9534f; }
+        .hidden { display: none; }
+        progress { width: 100%; height: 20px; }
+    </style>
+</head>
+<body>
+
+    <h2>📦 P2P File Transfer</h2>
+    <p>Статус: <span id="status">Ожидание...</span></p>
+
+    <div id="setup-step" class="card">
+        <h3>1. Инициализация</h3>
+        <button id="create-offer">Создать комнату (Отправитель)</button>
+        <p>Или вставьте код от партнера ниже:</p>
+        <textarea id="remote-offer" placeholder="Вставьте код (SDP) сюда..."></textarea>
+        <button id="accept-offer">Подключиться к коду</button>
+    </div>
+
+    <div id="sdp-step" class="card hidden">
+        <h3>2. Передайте этот код партнеру</h3>
+        <p>Ваш локальный идентификатор (скопируйте и отправьте):</p>
+        <textarea id="local-offer" readonly></textarea>
+        <p id="info-text">Ожидание ответа от партнера...</p>
+    </div>
+
+    <div id="transfer-step" class="card hidden">
+        <h3>3. Передача</h3>
+        <input type="file" id="file-input">
+        <button id="send-file" disabled>Отправить файл</button>
+        <div id="progress-container" class="hidden">
+            <p>Прогресс: <span id="percent">0</span>%</p>
+            <progress id="progress-bar" value="0" max="100"></progress>
+        </div>
+        <div id="download-link"></div>
+    </div>
+
+    <script>
+        const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+        let dataChannel;
+
+        const statusEl = document.getElementById('status');
+        const localOfferEl = document.getElementById('local-offer');
+        const remoteOfferEl = document.getElementById('remote-offer');
+        const transferStep = document.getElementById('transfer-step');
+        const sdpStep = document.getElementById('sdp-step');
+
+        // --- ЛОГИКА ПОДКЛЮЧЕНИЯ ---
+
+        // Создание Оффера (Инициатор)
+        document.getElementById('create-offer').onclick = async () => {
+            dataChannel = pc.createDataChannel("fileTransfer");
+            setupDataChannel();
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+        };
+
+        // Прием Оффера или Ответа
+        document.getElementById('accept-offer').onclick = async () => {
+            const text = remoteOfferEl.value;
+            if (!text) return alert("Вставьте код!");
+            const sessionDesc = new RTCSessionDescription(JSON.parse(atob(text)));
+            await pc.setRemoteDescription(sessionDesc);
+            
+            if (sessionDesc.type === 'offer') {
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+            }
+        };
+
+        // Когда генерируется ICE-кандидат, обновляем текстовое поле с полным SDP
+        pc.onicecandidate = (e) => {
+            if (!e.candidate) {
+                localOfferEl.value = btoa(JSON.stringify(pc.localDescription));
+                sdpStep.classList.remove('hidden');
+                statusEl.innerText = "Код готов. Передайте его!";
+            }
+        };
+
+        pc.ondatachannel = (e) => {
+            dataChannel = e.channel;
+            setupDataChannel();
+        };
+
+        // --- ЛОГИКА ПЕРЕДАЧИ ДАННЫХ ---
+
+        function setupDataChannel() {
+            dataChannel.binaryType = 'arraybuffer';
+            dataChannel.onopen = () => {
+                statusEl.innerText = "Соединение установлено!";
+                statusEl.style.color = "green";
+                transferStep.classList.remove('hidden');
+                document.getElementById('setup-step').classList.add('hidden');
+                sdpStep.classList.add('hidden');
+                document.getElementById('send-file').disabled = false;
+            };
+
+            let receiveBuffer = [];
+            let receivedSize = 0;
+            let fileName = '';
+
+            dataChannel.onmessage = (e) => {
+                if (typeof e.data === 'string') {
+                    const meta = JSON.parse(e.data);
+                    fileName = meta.name;
+                    return;
+                }
+                
+                receiveBuffer.push(e.data);
+                receivedSize += e.data.byteLength;
+                
+                // Здесь в идеале нужно знать размер файла для прогресса
+                statusEl.innerText = `Получение: ${(receivedSize / 1024 / 1024).toFixed(2)} MB`;
+
+                // Для простоты примера: если данных нет 1 сек, считаем файл принятым
+                clearTimeout(window.downloadTimer);
+                window.downloadTimer = setTimeout(() => {
+                    const blob = new Blob(receiveBuffer);
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName || 'received_file';
+                    a.innerText = `Скачать ${fileName}`;
+                    document.getElementById('download-link').appendChild(a);
+                    receiveBuffer = [];
+                }, 1000);
+            };
+        }
+
+        document.getElementById('send-file').onclick = () => {
+            const file = document.getElementById('file-input').files[0];
+            if (!file) return;
+
+            // Отправляем метаданные
+            dataChannel.send(JSON.stringify({ name: file.name, size: file.size }));
+
+            const chunkSize = 16384;
+            const reader = new FileReader();
+            let offset = 0;
+
+            document.getElementById('progress-container').classList.remove('hidden');
+
+            reader.onload = (e) => {
+                dataChannel.send(e.target.result);
+                offset += e.target.result.byteLength;
+                const percent = Math.round((offset / file.size) * 100);
+                document.getElementById('percent').innerText = percent;
+                document.getElementById('progress-bar').value = percent;
+
+                if (offset < file.size) {
+                    readNext();
+                } else {
+                    statusEl.innerText = "Отправка завершена!";
+                }
+            };
+
+            const readNext = () => {
+                const slice = file.slice(offset, offset + chunkSize);
+                reader.readAsArrayBuffer(slice);
+            };
+
+            readNext();
+        };
+    </script>
+</body>
+</html>
